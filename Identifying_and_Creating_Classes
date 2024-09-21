@@ -1,0 +1,60 @@
+#Task 1: Identifying and Creating Classes
+
+# Class to handle fetching weather data
+class WeatherFetcher:
+    def fetch_weather_data(self, city):
+        print(f"Fetching weather data for {city}...")
+        weather_data = {
+            "New York": {"temperature": 70, "condition": "Sunny", "humidity": 50, "city": "New York"},
+            "London": {"temperature": 60, "condition": "Cloudy", "humidity": 65, "city": "London"},
+            "Tokyo": {"temperature": 75, "condition": "Rainy", "humidity": 70, "city": "Tokyo"}
+        }
+        return weather_data.get(city, {})
+
+
+# Class to handle parsing weather data
+class WeatherParser:
+    def parse_weather_data(self, data):
+        if not data:
+            return "Weather data not available"
+        city = data["city"]
+        temperature = data["temperature"]
+        condition = data["condition"]
+        humidity = data["humidity"]
+        return f"Weather in {city}: {temperature} degrees, {condition}, Humidity: {humidity}%"
+
+
+# Class to manage user interaction
+class UserInterface:
+    def __init__(self):
+        self.fetcher = WeatherFetcher()  # Instantiate WeatherFetcher
+        self.parser = WeatherParser()    # Instantiate WeatherParser
+
+    def get_detailed_forecast(self, city):
+        data = self.fetcher.fetch_weather_data(city)
+        return self.parser.parse_weather_data(data)
+
+    def display_weather(self, city):
+        data = self.fetcher.fetch_weather_data(city)
+        if not data:
+            return f"Weather data not available for {city}"
+        else:
+            return self.parser.parse_weather_data(data)
+
+    def run(self):
+        while True:
+            city = input("Enter the city to get the weather forecast or 'exit' to quit: ")
+            if city.lower() == 'exit':
+                break
+            detailed = input("Do you want a detailed forecast? (yes/no): ").lower()
+            if detailed == 'yes':
+                forecast = self.get_detailed_forecast(city)
+            else:
+                forecast = self.display_weather(city)
+            print(forecast)
+
+
+# Main application execution
+if __name__ == "__main__":
+    ui = UserInterface()
+    ui.run()
